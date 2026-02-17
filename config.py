@@ -5,21 +5,23 @@ Usando Groq (100% gratuito y ultra rápido)
 import os
 from dotenv import load_dotenv
 
-# Cargar variables de entorno
+# Cargar variables de entorno (funciona en local)
 load_dotenv()
 
-# Configuración de Groq
-GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+# Intentar obtener la key desde Streamlit Secrets (para deploy)
+# o desde el archivo .env (para local)
+try:
+    import streamlit as st
+    GROQ_API_KEY = st.secrets.get("GROQ_API_KEY") or os.getenv("GROQ_API_KEY")
+except Exception:
+    GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
-# Modelos disponibles en Groq (todos gratis):
-# - llama-3.3-70b-versatile  -> Más inteligente (recomendado)
-# - llama-3.1-8b-instant     -> Más rápido y ligero
-# - mixtral-8x7b-32768       -> Bueno para código
+# Modelo a usar
 MODEL_NAME = "llama-3.3-70b-versatile"
 
 # Parámetros del modelo
-TEMPERATURE = 0.7  # Creatividad (0-1, más alto = más creativo)
-MAX_TOKENS = 500   # Máximo de tokens por respuesta
+TEMPERATURE = 0.7
+MAX_TOKENS = 500
 
 # Validar que existe la API key
 if not GROQ_API_KEY:
